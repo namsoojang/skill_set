@@ -52,6 +52,7 @@
 | **`fal-image-edit`** | 스타일 트랜스퍼, 객체 제거 등 AI 기반 이미지 편집을 수행합니다. | 이미지 보정 및 합성 |
 | **`fal-upscale`** | 저해상도 이미지 및 비디오를 고해상도로 개선하고 디테일을 강화합니다. | 미디어 품질 향상 |
 | **`imagen`** | Google Imagen 모델을 통해 고품질의 이미지를 생성하고 편집합니다. | UI/UX 컨셉 일러스트 및 에셋 생성 |
+| **`logo-generator`** | 기하학적 형태(도트 매트릭스, 라인 시스템 등)의 6+가지 SVG 로고 디자인 변형과 12가지 배경 목업 쇼케이스 이미지를 자동으로 생성합니다.<br>🔗 [GitHub Source](https://github.com/op7418/logo-generator-skill)<br>💻 `npx skills add https://github.com/op7418/logo-generator-skill.git` | 브랜드 로고 디자인 및 목업 쇼케이스 제작 |
 
 ---
 
