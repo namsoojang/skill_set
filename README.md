@@ -11,6 +11,7 @@
 4. [개발 프로세스 & QA (Development & Quality Assurance)](#4-개발-프로세스--qa-development--quality-assurance)
 5. [마케팅 & 기획 전략 (Marketing & Strategy - 에이전트 탑재형 스킬)](#5-마케팅--기획-전략-marketing--strategy---에이전트-탑재형-스킬)
 6. [한국어 특화 및 글쓰기 교정 스킬 (Korean-Specific Skills - 글로벌 적용)](#6-한국어-특화-및-글쓰기-교정-스킬-korean-specific-skills---글로벌-적용)
+7. [슬라이드 제작 자동화 (Future Slide Workflow)](#7-슬라이드-제작-자동화-future-slide-workflow)
 
 ---
 
@@ -170,3 +171,58 @@ AI 에이전트 환경에서 한국어 텍스트 작성을 자연스럽게 다�
 | **`humanizer`** (`humanize-korean`) | `/korean-skills:humanizer` | AI가 생성한 어색한 한국어 번역투나 부자연스러운 문장 구조를 자연스러운 인간의 구어/문어체로 교정합니다. (40여 가지 어휘 및 문장구조 감지 패턴 제공) |
 | **`grammar-checker`** | `/korean-skills:grammar-checker` | 한국어 문법, 맞춤법, 띄어쓰기 및 구두점 오류를 자동으로 검사하고 수정안을 제시합니다. |
 | **`style-guide`** | `/korean-skills:style-guide` | 문서 내 격식(존댓말, 반말 등)과 톤앤매너가 일정하게 유지되고 있는지 스타일 일관성을 평가합니다. |
+
+---
+
+## 7. 슬라이드 제작 자동화 (Future Slide Workflow)
+
+참고 슬라이드 이미지, 사용자 자료, 발표 목적을 기반으로 디자인 시스템 추출부터 슬라이드 기획, 페이지별 프롬프트 작성, 최종 렌더링까지 이어지는 발표자료 제작 스킬셋입니다. 원본은 [bytonylee/future-slide](https://github.com/bytonylee/future-slide) 저장소이며, 이 저장소에는 Codex에서 바로 참고할 수 있도록 `skills/` 폴더 아래에 스킬 원본을 함께 보관했습니다.
+
+### 📦 포함된 스킬
+
+| 스킬명 | 설명 / 저장 위치 | 주요 사용 목적 |
+| :--- | :--- | :--- |
+| **`slide-design`** | 참고 슬라이드 이미지에서 재사용 가능한 `DESIGN.md`를 추출합니다.<br>📁 `skills/slide-design` | 발표자료의 색상, 타이포그래피, 레이아웃, 카드/표/차트 규칙 정리 |
+| **`gpt-image-slide`** | 이미지 기반 슬라이드 제작 전체 워크플로우를 한 번에 실행합니다.<br>📁 `skills/gpt-image-slide` | 디자인 추출 → 기획 → 프롬프트 → 이미지 렌더링 일괄 수행 |
+| **`gpt-image-slide-plan`** | `DESIGN.md`, 사용자 자료, 발표 목적을 바탕으로 `slide_plan.json`을 작성합니다.<br>📁 `skills/gpt-image-slide-plan` | 설득 흐름, 페이지 순서, 근거 배치, 슬라이드 역할 설계 |
+| **`gpt-image-slide-prompt`** | 기획안을 페이지별 이미지 생성 프롬프트인 `slide_prompts.json`으로 변환합니다.<br>📁 `skills/gpt-image-slide-prompt` | 각 장표의 헤더/본문/푸터, 시각 요소, 금지 규칙 구체화 |
+| **`gpt-image-slide-render`** | `DESIGN.md`와 `slide_prompts.json`을 기준으로 장표 이미지를 순차 생성합니다.<br>📁 `skills/gpt-image-slide-render` | `page_1.png`, `page_2.png`처럼 번호가 붙은 최종 슬라이드 이미지 생성 |
+| **`tightened-slide`** | 단일 HTML 기반의 가로 스와이프 발표자료를 엄격한 레이아웃 규칙으로 생성합니다.<br>📁 `skills/tightened-slide` | 브라우저에서 바로 열 수 있는 정교한 HTML 덱 제작 및 검증 |
+
+### 🔁 권장 실행 순서
+
+```text
+$slide-design
+참고 슬라이드 이미지에서 발표 디자인 시스템을 DESIGN.md로 추출합니다.
+
+$gpt-image-slide-plan
+DESIGN.md와 사용자 자료를 바탕으로 전체 장표 흐름과 메시지 구조를 설계합니다.
+
+$gpt-image-slide-prompt
+slide_plan.json을 페이지별 이미지 생성 프롬프트로 변환합니다.
+
+$gpt-image-slide-render
+slide_prompts.json에 따라 page_1.png ... page_N.png를 순차 생성합니다.
+```
+
+HTML 발표자료가 필요할 때는 이미지 렌더링 흐름 대신 아래 스킬을 사용합니다.
+
+```text
+$tightened-slide
+단일 HTML 파일 기반의 가로 스와이프 발표자료를 생성하고 레이아웃 검증까지 수행합니다.
+```
+
+### 💻 Codex 전역 설치 명령어
+
+```bash
+python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
+  --repo bytonylee/future-slide \
+  --path skills/slide-design \
+  --path skills/gpt-image-slide \
+  --path skills/gpt-image-slide-plan \
+  --path skills/gpt-image-slide-prompt \
+  --path skills/gpt-image-slide-render \
+  --path skills/tightened-slide
+```
+
+설치 후에는 Codex를 재시작해야 새 스킬이 인식됩니다.
